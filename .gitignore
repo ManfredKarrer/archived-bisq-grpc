@@ -3,7 +3,7 @@
 build
 
 # IDEA
-#.idea
+.idea
 out
 *.iml
 
