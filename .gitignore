@@ -1,0 +1,42 @@
+#  Gradle
+.gradle
+build
+
+# IDEA
+.idea
+*.iml
+
+# macOS
+.DS_Store
+
+# Vim
+*.sw?
+
+/docs
+/log
+/bin
+/out
+.idea
+*.iml
+*.spvchain
+*.wallet
+*.ser
+*.log
+*.sw[op]
+.DS_Store
+.gradle
+build
+.classpath
+.project
+.settings
+*.java.hsp
+*.~ava
+/bundles
+/bisq*
+/xchange
+desktop.ini
+*/target/*
+*.class
+deploy
+releases/*
+
