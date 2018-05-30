@@ -1,3 +1,17 @@
+buildscript {
+    repositories {
+        maven {
+            // The google mirror is less flaky than mavenCentral()
+            url "https://maven-central.storage-download.googleapis.com/repos/central/data/"
+        }
+    }
+    dependencies {
+        // ASSUMES GRADLE 2.12 OR HIGHER. Use plugin version 0.7.5 with earlier
+        // gradle versions
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.3'
+    }
+}
+
 plugins {
     id 'java'
     id 'maven'
@@ -26,21 +40,6 @@ repositories {
     maven { url 'https://jitpack.io' }
     mavenLocal()
 }
-
-buildscript {
-    repositories {
-        maven {
-            // The google mirror is less flaky than mavenCentral()
-            url "https://maven-central.storage-download.googleapis.com/repos/central/data/"
-        }
-    }
-    dependencies {
-        // ASSUMES GRADLE 2.12 OR HIGHER. Use plugin version 0.7.5 with earlier
-        // gradle versions
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.3'
-    }
-}
-
 
 // IMPORTANT: You probably want the non-SNAPSHOT version of gRPC. Make sure you
 // are looking at a tagged version of the example and not "master"!
