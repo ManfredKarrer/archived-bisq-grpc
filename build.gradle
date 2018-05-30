@@ -1,10 +1,31 @@
-group 'bisq'
-version '1.0-SNAPSHOT'
+plugins {
+    id 'java'
+    id 'maven'
+    id 'com.google.protobuf' version '0.8.5'
+}
 
-apply plugin: 'java'
-apply plugin: 'com.google.protobuf'
+group = 'network.bisq'
+version = '-SNAPSHOT'
+
+ext {
+    protobufVersion = '3.5.1'
+}
 
 sourceCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    maven {
+        // The google mirror is less flaky than mavenCentral()
+        url "https://maven-central.storage-download.googleapis.com/repos/central/data/"
+    }
+    jcenter()
+    maven { url 'https://jitpack.io' }
+    mavenLocal()
+}
 
 buildscript {
     repositories {
@@ -20,13 +41,6 @@ buildscript {
     }
 }
 
-repositories {
-    maven {
-        // The google mirror is less flaky than mavenCentral()
-        url "https://maven-central.storage-download.googleapis.com/repos/central/data/"
-    }
-    mavenLocal()
-}
 
 // IMPORTANT: You probably want the non-SNAPSHOT version of gRPC. Make sure you
 // are looking at a tagged version of the example and not "master"!
@@ -37,6 +51,7 @@ def grpcVersion = '1.12.0' // CURRENT_GRPC_VERSION
 def nettyTcNativeVersion = '2.0.7.Final'
 
 dependencies {
+    compile 'network.bisq:bisq-core:-SNAPSHOT'
     compile "com.google.api.grpc:proto-google-common-protos:1.0.0"
     compile "io.grpc:grpc-alts:${grpcVersion}"
     compile "io.grpc:grpc-netty:${grpcVersion}"
@@ -87,22 +102,22 @@ apply plugin: 'application'
 startScripts.enabled = false
 
 
-task helloWorldServer(type: CreateStartScripts) {
-    mainClassName = 'bisq.grpc.Bisqd'
-    applicationName = 'Bisqd'
+task BisqGrpcServer(type: CreateStartScripts) {
+    mainClassName = 'bisq.grpc.BisqGrpcServer'
+    applicationName = 'BisqGrpcServer'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = jar.outputs.files + project.configurations.runtime
 }
 
-task helloWorldClient(type: CreateStartScripts) {
-    mainClassName = 'bisq.grpc.BisqCli'
-    applicationName = 'BisqCli'
+task BisqGrpcClient(type: CreateStartScripts) {
+    mainClassName = 'bisq.grpc.BisqGrpcClient'
+    applicationName = 'BisqGrpcClient'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = jar.outputs.files + project.configurations.runtime
 }
 
 applicationDistribution.into('bin') {
-    from(helloWorldServer)
-    from(helloWorldClient)
+    from(BisqGrpcServer)
+    from(BisqGrpcClient)
     fileMode = 0755
 }

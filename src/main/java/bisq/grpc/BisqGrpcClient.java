@@ -17,14 +17,16 @@
 
 package bisq.grpc;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.StatusRuntimeException;
-
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 
 public class BisqGrpcClient {
     private static final Logger logger = Logger.getLogger(BisqGrpcClient.class.getName());
@@ -45,7 +47,7 @@ public class BisqGrpcClient {
                     result = client.getVersion();
                 } else if (input.equals("getBalance")) {
                     result = String.valueOf(client.getBalance());
-                } else if (input.equals("stopClient")) {
+                } else if (input.equals("stop")) {
                     result = "Shut down client";
                     client.shutdown();
                 } else if (input.equals("stopServer")) {
