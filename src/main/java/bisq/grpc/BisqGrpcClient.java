@@ -15,7 +15,7 @@
  * along with Bisq. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package bisq.grpc;
+package bisq.httpapi;
 
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;

@@ -38,6 +38,7 @@ repositories {
     }
     jcenter()
     maven { url 'https://jitpack.io' }
+    maven { url 'https://raw.githubusercontent.com/JesusMcCloud/tor-binary/master/release/' }
     mavenLocal()
 }
 
@@ -50,7 +51,13 @@ def grpcVersion = '1.12.0' // CURRENT_GRPC_VERSION
 def nettyTcNativeVersion = '2.0.7.Final'
 
 dependencies {
+    compile 'network.bisq:bisq-common:-SNAPSHOT'
     compile 'network.bisq:bisq-core:-SNAPSHOT'
+    compile 'network.bisq:bisq-p2p:-SNAPSHOT'
+    runtime 'org.bouncycastle:bcprov-jdk15on:1.56'
+    compileOnly 'org.projectlombok:lombok:1.16.16'
+    annotationProcessor 'org.projectlombok:lombok:1.16.16'
+
     compile "com.google.api.grpc:proto-google-common-protos:1.0.0"
     compile "io.grpc:grpc-alts:${grpcVersion}"
     compile "io.grpc:grpc-netty:${grpcVersion}"

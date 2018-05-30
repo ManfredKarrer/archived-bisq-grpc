@@ -15,15 +15,19 @@
  * along with Bisq. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package bisq.grpc;
+package bisq.httpapi;
 
 import bisq.core.Daemon;
+
+import java.io.IOException;
+
+import java.util.logging.Logger;
+
+
+
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
-
-import java.io.IOException;
-import java.util.logging.Logger;
 
 public class BisqGrpcServer {
     private static final Logger logger = Logger.getLogger(BisqGrpcServer.class.getName());
