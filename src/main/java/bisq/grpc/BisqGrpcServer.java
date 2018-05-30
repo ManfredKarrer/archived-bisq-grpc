@@ -15,7 +15,7 @@
  * along with Bisq. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package bisq.httpapi;
+package bisq.grpc;
 
 import bisq.core.Daemon;
 

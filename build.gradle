@@ -56,7 +56,9 @@ dependencies {
     compile 'network.bisq:bisq-p2p:-SNAPSHOT'
     runtime 'org.bouncycastle:bcprov-jdk15on:1.56'
     compileOnly 'org.projectlombok:lombok:1.16.16'
-    annotationProcessor 'org.projectlombok:lombok:1.16.16'
+
+    // annotationProcessor seems to conflict with generate protobuffer
+    /*annotationProcessor 'org.projectlombok:lombok:1.16.16'*/
 
     compile "com.google.api.grpc:proto-google-common-protos:1.0.0"
     compile "io.grpc:grpc-alts:${grpcVersion}"
