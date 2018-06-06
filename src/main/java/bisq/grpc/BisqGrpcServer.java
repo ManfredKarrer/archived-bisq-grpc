@@ -17,11 +17,11 @@
 
 package bisq.grpc;
 
-import bisq.core.Daemon;
+import bisq.core.app.BisqFacade;
 
 import java.io.IOException;
 
-import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 
 
@@ -29,20 +29,35 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
+/**
+ * gRPC server. Gets a instance of BisqFacade passed to access data from the running Bisq instance.
+ */
+@Slf4j
 public class BisqGrpcServer {
-    private static final Logger logger = Logger.getLogger(BisqGrpcServer.class.getName());
 
-    private static Server server;
-    private static Daemon bisqDaemon;
+    private Server server;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        final BisqGrpcServer server = new BisqGrpcServer(new Daemon());
-        server.start();
-        server.blockUntilShutdown();
+    private static BisqGrpcServer instance;
+    private static BisqFacade bisqFacade;
+
+    private static BisqGrpcServer getInstance() {
+        return instance;
     }
 
-    private BisqGrpcServer(Daemon bisqDaemon) {
-        this.bisqDaemon = bisqDaemon;
+    private static BisqFacade getBisqFacade() {
+        return bisqFacade;
+    }
+
+    public BisqGrpcServer(BisqFacade bisqFacade) {
+        instance = this;
+        BisqGrpcServer.bisqFacade = bisqFacade;
+
+        try {
+            start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void start() throws IOException {
@@ -54,25 +69,24 @@ public class BisqGrpcServer {
                 .addService(new StopServerImpl())
                 .build()
                 .start();
-        logger.info("Server started, listening on " + port);
+        log.info("Server started, listening on " + port);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             // Use stderr here since the logger may have been reset by its JVM shutdown hook.
-            System.err.println("*** shutting down gRPC server since JVM is shutting down");
+            log.error("*** shutting down gRPC server since JVM is shutting down");
             BisqGrpcServer.this.stop();
-            System.err.println("*** server shut down");
+            log.error("*** server shut down");
         }));
     }
 
-    private static void stop() {
-        if (server != null) {
+    public void stop() {
+        if (server != null)
             server.shutdown();
-        }
     }
 
     /**
      * Await termination on the main thread since the grpc library uses daemon threads.
      */
-    private void blockUntilShutdown() throws InterruptedException {
+    public void blockUntilShutdown() throws InterruptedException {
         if (server != null) {
             server.awaitTermination();
         }
@@ -82,7 +96,7 @@ public class BisqGrpcServer {
     static class GetVersionImpl extends GetVersionGrpc.GetVersionImplBase {
         @Override
         public void getVersion(GetVersionRequest req, StreamObserver<GetVersionReply> responseObserver) {
-            GetVersionReply reply = GetVersionReply.newBuilder().setVersion(bisqDaemon.getVersion()).build();
+            GetVersionReply reply = GetVersionReply.newBuilder().setVersion(getBisqFacade().getVersion()).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }
@@ -91,7 +105,7 @@ public class BisqGrpcServer {
     static class GetBalanceImpl extends GetBalanceGrpc.GetBalanceImplBase {
         @Override
         public void getBalance(GetBalanceRequest req, StreamObserver<GetBalanceReply> responseObserver) {
-            GetBalanceReply reply = GetBalanceReply.newBuilder().setBalance(bisqDaemon.getBalance()).build();
+            GetBalanceReply reply = GetBalanceReply.newBuilder().setBalance(getBisqFacade().getAvailableBalance()).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }
@@ -104,7 +118,7 @@ public class BisqGrpcServer {
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
 
-            stop();
+            getInstance().stop();
         }
     }
 }

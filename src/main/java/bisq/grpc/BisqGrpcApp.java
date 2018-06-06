@@ -15,21 +15,12 @@
  * along with Bisq. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package bisq.core;
+package bisq.grpc;
 
-// Dummy for Bisq core services
-public class Daemon {
-    private String version = "0.7.0";
-    private long balance = 2131231231;
+import bisq.core.app.BisqHeadlessApp;
 
-    public Daemon() {
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public long getBalance() {
-        return balance;
-    }
+/**
+ * Headless Bisq application. Only used if gRPC API runs in headless mode.
+ */
+public class BisqGrpcApp extends BisqHeadlessApp {
 }

@@ -19,8 +19,8 @@ package bisq.grpc;
 
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 
@@ -28,9 +28,11 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
+/**
+ * gRPC client.
+ */
+@Slf4j
 public class BisqGrpcClient {
-    private static final Logger logger = Logger.getLogger(BisqGrpcClient.class.getName());
-
     private final ManagedChannel channel;
     private final GetVersionGrpc.GetVersionBlockingStub getVersionStub;
     private final GetBalanceGrpc.GetBalanceBlockingStub getBalanceStub;
@@ -56,12 +58,11 @@ public class BisqGrpcClient {
                 }
 
                 // First response is rather slow (300 ms) but following responses are fast (3-5 ms).
-                logger.log(Level.INFO, "Request took: {0} ms", System.currentTimeMillis() - startTs);
+                log.info("Request took: {0} ms", System.currentTimeMillis() - startTs);
                 System.out.println(result);
             }
         }
     }
-
 
     private BisqGrpcClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
@@ -95,7 +96,7 @@ public class BisqGrpcClient {
         try {
             return getBalanceStub.getBalance(request).getBalance();
         } catch (StatusRuntimeException e) {
-            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            log.warn("RPC failed: {0}", e.getStatus());
             return -1;
         }
     }
@@ -105,7 +106,7 @@ public class BisqGrpcClient {
         try {
             stopServerStub.stopServer(request);
         } catch (StatusRuntimeException e) {
-            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            log.warn("RPC failed: {0}", e.getStatus());
         }
     }
 
