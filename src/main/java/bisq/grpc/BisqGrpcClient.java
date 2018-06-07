@@ -58,7 +58,7 @@ public class BisqGrpcClient {
                 }
 
                 // First response is rather slow (300 ms) but following responses are fast (3-5 ms).
-                log.info("Request took: {0} ms", System.currentTimeMillis() - startTs);
+                log.info("Request took: {} ms", System.currentTimeMillis() - startTs);
                 System.out.println(result);
             }
         }
@@ -96,7 +96,7 @@ public class BisqGrpcClient {
         try {
             return getBalanceStub.getBalance(request).getBalance();
         } catch (StatusRuntimeException e) {
-            log.warn("RPC failed: {0}", e.getStatus());
+            log.warn("RPC failed: {}", e.getStatus());
             return -1;
         }
     }
@@ -106,7 +106,7 @@ public class BisqGrpcClient {
         try {
             stopServerStub.stopServer(request);
         } catch (StatusRuntimeException e) {
-            log.warn("RPC failed: {0}", e.getStatus());
+            log.warn("RPC failed: {}", e.getStatus());
         }
     }
 
