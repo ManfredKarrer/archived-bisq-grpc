@@ -129,3 +129,7 @@ applicationDistribution.into('bin') {
     from(BisqGrpcClient)
     fileMode = 0755
 }
+
+build.dependsOn installDist
+installDist.destinationDir = file('build/app')
+distZip.enabled = false
