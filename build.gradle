@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         maven {
             // The google mirror is less flaky than mavenCentral()
             url "https://maven-central.storage-download.googleapis.com/repos/central/data/"
@@ -32,6 +33,7 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
+    mavenLocal()
     maven {
         // The google mirror is less flaky than mavenCentral()
         url "https://maven-central.storage-download.googleapis.com/repos/central/data/"
@@ -39,7 +41,6 @@ repositories {
     jcenter()
     maven { url 'https://jitpack.io' }
     maven { url 'https://raw.githubusercontent.com/JesusMcCloud/tor-binary/master/release/' }
-    mavenLocal()
 }
 
 // IMPORTANT: You probably want the non-SNAPSHOT version of gRPC. Make sure you
@@ -58,7 +59,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.16.16'
 
     // annotationProcessor seems to conflict with generate protobuffer
-    /*annotationProcessor 'org.projectlombok:lombok:1.16.16'*/
+    // annotationProcessor 'org.projectlombok:lombok:1.16.16'
 
     compile "com.google.api.grpc:proto-google-common-protos:1.0.0"
     compile "io.grpc:grpc-alts:${grpcVersion}"
@@ -132,4 +133,3 @@ applicationDistribution.into('bin') {
 
 build.dependsOn installDist
 installDist.destinationDir = file('build/app')
-distZip.enabled = false
