@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         maven {
             // The google mirror is less flaky than mavenCentral()
             url "https://maven-central.storage-download.googleapis.com/repos/central/data/"
@@ -32,6 +33,7 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
+    mavenLocal()
     maven {
         // The google mirror is less flaky than mavenCentral()
         url "https://maven-central.storage-download.googleapis.com/repos/central/data/"
@@ -39,7 +41,6 @@ repositories {
     jcenter()
     maven { url 'https://jitpack.io' }
     maven { url 'https://raw.githubusercontent.com/JesusMcCloud/tor-binary/master/release/' }
-    mavenLocal()
 }
 
 // IMPORTANT: You probably want the non-SNAPSHOT version of gRPC. Make sure you
